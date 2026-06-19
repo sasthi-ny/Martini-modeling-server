@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Auto Analysis</title>
+
+  <link rel="stylesheet" href="/static/css/app.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div>
+        <h1 class="title">Auto Analysis</h1>
+        <p class="subtitle">
+          Upload an XTC and GRO, run a workflow, and view plots plus method notes in the browser.
+        </p>
+      </div>
+      <div id="statusBadge" class="badge">Idle</div>
+    </div>
+
+    <!-- ================= TWO COLUMN LAYOUT ================= -->
+    <div class="two-col">
+
+      <!-- ================= LEFT COLUMN ================= -->
+      <div class="left-col">
+
+        <!-- ================= RUN ANALYSIS CARD ================= -->
+        <div class="card">
+          <div class="card-header">
+            <div style="font-weight: 700;">Run analysis</div>
+            <div class="badge" style="border-color: rgba(255,255,255,0.12);">Local</div>
+          </div>
+
+          <div class="card-body">
+            <form id="form">
+              <div class="grid">
+                <div>
+                  <label>XTC trajectory</label>
+                  <input type="file" name="trajectory" required />
+                  <div class="hint">Example: md_0_400_short_trj.xtc</div>
+                </div>
+                <div>
+                  <label>GRO structure</label>
+                  <input type="file" name="structure" required />
+                  <div class="hint">Example: em.gro</div>
+                </div>
+                <div>
+                  <label>Analysis</label>
+                  <select name="analysis_type">
+                    <option value="apl">apl</option>
+                    <option value="thickness">thickness</option>
+                    <option value="order_parameter">order parameter</option>
+                    <option value="diffusion">diffusion</option>
+                  </select>
+                  <div class="hint">Choose the workflow to run</div>
+                </div>
+                <div>
+                  <label>Run</label>
+                  <div class="actions">
+                    <button id="runBtn" type="submit">Run analysis</button>
+                    <button id="resetBtn" type="button">Reset</button>
+                  </div>
+                  <div class="hint" id="msg">Ready</div>
+                </div>
+              </div>
+            </form>
+
+            <div class="results" id="results" style="display:none;">
+              <div class="plot-wrap">
+                <img id="plot" alt="Plot output" />
+              </div>
+
+              <div class="panel">
+                <h3>Run details</h3>
+                <div class="kv" id="details"></div>
+
+                <h3 style="margin-top: 14px;">Downloads</h3>
+                <div class="links" id="links"></div>
+
+                <h3 style="margin-top: 14px;">Methods</h3>
+                <pre id="methods">Loading...</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- ================= END RUN ANALYSIS CARD ================= -->
+
+      </div>
+      <!-- ================= END LEFT COLUMN ================= -->
+
+
+      <!-- ================= RIGHT COLUMN ================= -->
+      <div class="right-col">
+
+        <!-- ================= MODEL POLYMER (POLYPLY) CARD ================= -->
+        <div class="card">
+          <div class="card-header">
+            <div style="font-weight: 700;">Model polymer (polyply)</div>
+            <div class="badge" style="border-color: rgba(255,255,255,0.12);">Local</div>
+          </div>
+
+          <div class="card-body">
+            <form id="modelForm">
+              <div class="grid">
+                <div>
+                  <label>Polymer</label>
+                  <select name="polymer">
+                    <option value="PS">PS</option>
+                  </select>
+                  <div class="hint">Choose polymer type</div>
+                </div>
+
+                <div>
+                  <label>Martini version</label>
+                  <select name="martini">
+                    <option value="martini2">martini2</option>
+                    <option value="martini3">martini3</option>
+                  </select>
+                  <div class="hint">Select force field library</div>
+                </div>
+
+                <div>
+                  <label>Chain length</label>
+                  <input type="number" name="chain_length" value="25" min="1" />
+                  <div class="hint">Example PS:25</div>
+                </div>
+
+                <div>
+                  <label>Number of chains</label>
+                  <input type="number" name="n_chains" value="10" min="1" />
+                  <div class="hint">Used in topol.top molecules section</div>
+                </div>
+
+                <div>
+                  <label>Box size (nm)</label>
+                  <input type="text" name="box" value="15 15 15" />
+                  <div class="hint">Three numbers, example 15 15 15</div>
+                </div>
+
+                <div>
+                  <label>Run</label>
+                  <div class="actions">
+                    <button id="modelBtn" type="submit">Generate CG polymer</button>
+                    <button id="modelResetBtn" type="button">Reset</button>
+                  </div>
+                  <div class="hint" id="modelMsg">Ready</div>
+                </div>
+              </div>
+            </form>
+
+            <div class="results" id="modelResults" style="display:none;">
+              <div class="plot-wrap">
+                <img id="modelPlot" alt="Model preview" />
+              </div>
+
+              <div class="panel">
+                <h3>Run details</h3>
+                <div class="kv" id="modelDetails"></div>
+
+                <h3 style="margin-top: 14px;">Downloads</h3>
+                <div class="links" id="modelLinks"></div>
+
+                <h3 style="margin-top: 14px;">Log</h3>
+                <pre id="modelLog">Loading...</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- ================= END MODEL POLYMER (POLYPLY) CARD ================= -->
+
+
+        <!-- ================= MEMBRANE (INSANE) CARD ================= -->
+        <div class="card">
+          <div class="card-header">
+            <div style="font-weight: 700;">Build membrane (INSANE)</div>
+            <div class="badge" style="border-color: rgba(255,255,255,0.12);">Local</div>
+          </div>
+
+          <div class="card-body">
+            <form id="membraneForm">
+              <div class="grid">
+                <div>
+                  <label>Lipid type</label>
+                  <select name="lipid">
+                    <option value="POPC">POPC</option>
+                    <option value="DPPC">DPPC</option>
+                  </select>
+                  <div class="hint">Choose lipid type</div>
+                </div>
+
+                <div>
+                  <label>Box X (nm)</label>
+                  <input type="number" name="box_x" value="25" step="0.1" />
+                </div>
+
+                <div>
+                  <label>Box Y (nm)</label>
+                  <input type="number" name="box_y" value="25" step="0.1" />
+                </div>
+
+                <div>
+                  <label>Box Z (nm)</label>
+                  <input type="number" name="box_z" value="20" step="0.1" />
+                </div>
+
+                <div>
+                  <label>Run</label>
+                  <div class="actions">
+                    <button id="membraneBtn" type="submit">Build membrane</button>
+                    <button id="membraneResetBtn" type="button">Reset</button>
+                  </div>
+                  <div class="hint" id="membraneMsg">Ready</div>
+                </div>
+              </div>
+            </form>
+
+            <div class="results" id="membraneResults" style="display:none;">
+              <div class="panel">
+                <h3>Run details</h3>
+                <div class="kv" id="membraneDetails"></div>
+
+                <h3 style="margin-top: 14px;">Downloads</h3>
+                <div class="links" id="membraneLinks"></div>
+
+                <h3 style="margin-top: 14px;">Log</h3>
+                <pre id="membraneLog">Loading...</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- ================= END MEMBRANE (INSANE) CARD ================= -->
+
+      </div>
+      <!-- ================= END RIGHT COLUMN ================= -->
+
+    </div>
+    <!-- ================= END TWO COLUMN LAYOUT ================= -->
+
+  </div>
+
+  <script src="/static/js/analysis.js"></script>
+  <script src="/static/js/tabs.js"></script>
+  <script src="/static/js/polymer.js"></script>
+  <script src="/static/js/membrane.js"></script>
+  <script src="/static/js/viewer.js"></script>
+</body>
+</html>
+

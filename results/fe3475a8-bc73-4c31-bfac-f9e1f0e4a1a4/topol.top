@@ -1,0 +1,9 @@
+#include "/app/toppar/martini_v2.0_PEO_PS_CNP.itp"
+#include "PS25.itp"
+
+[system]
+PS in water
+
+[molecules]
+; Compound #mols
+PS 10

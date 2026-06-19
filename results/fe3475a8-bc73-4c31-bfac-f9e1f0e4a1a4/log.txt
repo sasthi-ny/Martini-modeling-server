@@ -1,0 +1,63 @@
+job_id: fe3475a8-bc73-4c31-bfac-f9e1f0e4a1a4
+polymer: PS
+martini: martini2
+chain_length: 25
+n_chains: 10
+box: 15 15 15
+workdir: /app/results/fe3475a8-bc73-4c31-bfac-f9e1f0e4a1a4
+Running: polyply gen_params -lib martini2 -o PS25.itp -name PS -seq PS:25
+stdout:
+INFO - Couldn't import numba. Install it for a speed boost.
+
+stderr:
+INFO - step - reading input and library files
+INFO - step - reading sequence from command
+INFO - step - mapping sequence to molecule
+INFO - step - applying links between residues
+
+  0%|          | 0/60 [00:00<?, ?it/s]
+100%|██████████| 60/60 [00:00<00:00, 2732.80it/s]
+INFO - general - No modifications present in forcefield, none will be applied
+INFO - general - Please cite: Marrink, S J; Risselada, H J; Yefimov, S; Tieleman, D P; De Vries, A H;  The journal of physical chemistry B 2007; 10.1021/jp071097f
+INFO - general - Please cite: Grunewald, F; Alessandri, R; Kroon, P C; Monticelli, L; Souza, P C; Marrink, S J;  Nature Communications 2022; 10.1038/s41467-021-27627-4
+INFO - general - Please cite: Rossi, G; Monticelli, L; Puisto, S R; Vattulainen, I; Ala-Nissila, T;  Soft Matter 2011; 10.1039/C0SM00481B
+INFO - general - Please cite: Kroon, P C; Grunewald, F; Barnoud, J; van Tilburg, M; Souza, P C; Wassenaar, T A; Marrink, S J;  elife 2024; 10.7554/elife.90627.2
+
+Wrote topol.top:
+#include "/app/toppar/martini_v2.0_PEO_PS_CNP.itp"
+#include "PS25.itp"
+
+[system]
+PS in water
+
+[molecules]
+; Compound #mols
+PS 10
+
+Running: polyply gen_coords -p topol.top -o PS25.gro -name PS -box 15 15 15
+stdout:
+INFO - Couldn't import numba. Install it for a speed boost.
+
+stderr:
+INFO - step - reading topology
+INFO - step - processing topology
+INFO - step - reading build options
+INFO - step - generating templates
+
+  0%|          | 0/10 [00:00<?, ?it/s]
+100%|██████████| 10/10 [00:00<00:00, 184.45it/s]
+INFO - step - annotating ligands
+INFO - step - generating system coordinates
+
+  0%|          | 0/10 [00:00<?, ?it/s]
+100%|██████████| 10/10 [00:00<00:00, 129.57it/s]
+INFO - step - backmapping to target resolution
+
+  0%|          | 0/10 [00:00<?, ?it/s]
+ 10%|█         | 1/10 [00:00<00:00,  9.45it/s]
+ 30%|███       | 3/10 [00:00<00:00, 11.13it/s]
+ 60%|██████    | 6/10 [00:00<00:00, 16.97it/s]
+ 90%|█████████ | 9/10 [00:00<00:00, 19.73it/s]
+100%|██████████| 10/10 [00:00<00:00, 17.93it/s]
+INFO - step - writing output
+
